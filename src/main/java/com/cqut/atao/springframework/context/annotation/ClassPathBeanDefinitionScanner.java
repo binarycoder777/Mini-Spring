@@ -1,6 +1,7 @@
 package com.cqut.atao.springframework.context.annotation;
 
 import cn.hutool.core.util.StrUtil;
+import com.cqut.atao.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
 import com.cqut.atao.springframework.beans.factory.config.BeanDefinition;
 import com.cqut.atao.springframework.beans.factory.support.BeanDefinitionRegistry;
 import com.cqut.atao.springframework.stereotype.Component;
@@ -39,6 +40,9 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
                 registry.registerBeanDefinition(determineBeanName(beanDefinition), beanDefinition);
             }
         }
+
+        // 注册处理注解的 BeanPostProcessor（@Autowired、@Value）
+        registry.registerBeanDefinition("cn.bugstack.springframework.context.annotation.internalAutowiredAnnotationProcessor", new BeanDefinition(AutowiredAnnotationBeanPostProcessor.class));
     }
 
     private String resolveBeanScope(BeanDefinition beanDefinition) {
@@ -59,5 +63,4 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
         }
         return value;
     }
-
 }
